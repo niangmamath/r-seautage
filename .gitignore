@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+cache_networking.json
+annonces_vues.json
+.env
+logs/

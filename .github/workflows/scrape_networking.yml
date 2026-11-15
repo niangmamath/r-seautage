@@ -1,0 +1,64 @@
+name: Scraping networking Maroc
+
+# Depot dedie : a pousser sur le remote GitHub choisi (voir README).
+#
+# Declencheur : tous les 2 jours a 06:00 UTC (meme cadence que les autres
+# veilles). Cron GitHub Actions est "best-effort" cote horaire -- un
+# retard de quelques minutes/heures ne pose pas de probleme ici : les
+# evenements ont des fenetres de plusieurs jours.
+#
+# Prerequis Settings -> Secrets and variables -> Actions sur ce depot :
+#   - DATABASE_URL  (chaine Neon Postgres directe, port 5432, sslmode=require)
+on:
+  schedule:
+    - cron: "0 6 */2 * *"
+  workflow_dispatch: {}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout du depot
+        uses: actions/checkout@v4
+
+      - name: Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Installer les dependances Python
+        run: pip install -r requirements.txt
+
+      - name: Restaurer le cache de scraping
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            cache_networking.json
+            annonces_vues.json
+          key: networking-maroc-cache-${{ github.run_id }}
+          restore-keys: |
+            networking-maroc-cache-
+
+      - name: "Run complet (collecte + classification + synchro Neon)"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PYTHONUTF8: "1"
+          PYTHONIOENCODING: "utf-8"
+        run: python networking_maroc.py
+
+      - name: Sauvegarder le cache de scraping (meme si echec)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            cache_networking.json
+            annonces_vues.json
+          key: networking-maroc-cache-${{ github.run_id }}
+
+      - name: Journaux en cas d'echec
+        if: failure()
+        run: echo "Le run a echoue -- voir les logs de l'etape precedente pour le detail."
