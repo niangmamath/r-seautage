@@ -51,8 +51,16 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: { "fr-MA": "/" },
+  },
   formatDetection: { email: false, address: false, telephone: false },
+  category: "business",
+  // Si GSC rejette le fichier HTML, on peut aussi passer par le meta
+  // tag en decommentant. Le fichier HTML reste prioritaire pour l'instant
+  // (site/public/googleedcca78146818290.html).
+  // verification: { google: "<token GSC>" },
 };
 
 export default function RootLayout({
