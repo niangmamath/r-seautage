@@ -86,7 +86,16 @@ def _flatten_events(objs):
 
 
 def _event_to_annonce(ev, source):
-    """Convertit un Event schema.org en annonce interne."""
+    """Convertit un Event schema.org en annonce interne. Renvoie None
+    si l'événement est manifestement hors Maroc (addressCountry != MA
+    pour TOUS ses lieux, et pas d'indicateur "en ligne").
+
+    Incident constaté 2026-11-16 : Meetup `/find/?location=ma--<ville>`
+    élargit silencieusement aux pays voisins / internationaux quand il
+    manque d'événements marocains locaux (groupes Madrid/Lisbonne/
+    Krakow remontaient comme "Maroc" par défaut parce que notre code
+    forçait ville='Maroc' quand `addressLocality` était vide). Il faut
+    donc TOUJOURS vérifier `addressCountry`."""
     poste = ev.get("name") or ""
     if not poste:
         return None
@@ -94,25 +103,57 @@ def _event_to_annonce(ev, source):
     if isinstance(org, list):
         org = org[0] if org else {}
     entite = org.get("name", "") if isinstance(org, dict) else ""
-    loc = ev.get("location") or {}
-    if isinstance(loc, list):
-        loc = loc[0] if loc else {}
+
+    # Un événement peut avoir plusieurs `location` (liste) — on parcourt
+    # toutes pour détecter l'un d'eux au Maroc AVANT de rejeter.
+    locs_raw = ev.get("location") or {}
+    locs = locs_raw if isinstance(locs_raw, list) else [locs_raw]
+
     ville = ""
-    if isinstance(loc, dict):
+    countries_seen = set()
+    for loc in locs:
+        if not isinstance(loc, dict):
+            continue
         addr = loc.get("address") or {}
         if isinstance(addr, dict):
-            ville = (addr.get("addressLocality")
-                     or addr.get("addressRegion") or "")
-        ville = ville or loc.get("name", "")
+            c = (addr.get("addressCountry") or "").strip().upper()
+            if c:
+                countries_seen.add(c)
+            if not ville:
+                ville = (addr.get("addressLocality")
+                         or addr.get("addressRegion") or "")
+        if not ville:
+            ville = loc.get("name", "")
+
+    # Signal "en ligne" côté description, pour ne pas rejeter un event
+    # mondial accessible depuis le Maroc.
+    desc = (ev.get("description") or "").lower()
+    name_low = poste.lower()
+    en_ligne = any(k in desc or k in name_low for k in [
+        "online", "en ligne", "virtual", "webinar", "webinaire", "zoom"
+    ])
+
+    # Rejet au collecteur : country déterminé et différent de MA, et
+    # pas en ligne. Si country vide (aucun lieu structuré), on laisse
+    # le classifieur en aval décider — pas d'hypothèse "Maroc" ici.
+    if countries_seen and "MA" not in countries_seen and not en_ligne:
+        return None
+
     return {
         "poste": poste,
         "entite": entite or source,
-        "ville": ville or "Maroc",
+        # Pas de fallback "Maroc" aveugle : si addressLocality manque,
+        # on laisse vide. normalize_ville() posera "Maroc (non précisé)"
+        # SEULEMENT quand on a au moins confirmé MA.
+        "ville": ville,
         "url": ev.get("url", ""),
         "date_debut": (ev.get("startDate") or "")[:10],
         "date_fin": (ev.get("endDate") or "")[:10],
         "texte": (ev.get("description") or "")[:1000],
         "source": source,
+        # On transmet le country reconnu au classifieur, pour qu'il
+        # tranche sans deviner.
+        "country": "MA" if "MA" in countries_seen else "",
     }
 
 

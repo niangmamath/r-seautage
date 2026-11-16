@@ -189,11 +189,22 @@ def is_online(poste, ville, texte=""):
     return any(strip_accents(k) in blob for k in ONLINE_KW)
 
 
-def hors_maroc(poste, ville, texte=""):
+def hors_maroc(poste, ville, texte="", country=None):
+    """Vrai si l'événement est présentiel hors Maroc.
+
+    `country` est le code pays officiel extrait du JSON-LD par le
+    collecteur (cf. sources._event_to_annonce). Quand il vaut 'MA',
+    on fait confiance à la source et on ne cherche plus de signal
+    contradictoire ; quand il vaut une autre valeur, l'événement
+    aurait déjà été rejeté au collecteur ; quand il est vide, on
+    retombe sur la détection par mots-clés dans le texte (moins
+    fiable, mais mieux que rien)."""
     if is_online(poste, ville, texte):
         return False
+    if country == "MA":
+        return False
     blob = strip_accents(f"{poste} {ville}").lower()
-    if "maroc" in blob or "morocco" in blob or "ma " in blob + " ":
+    if "maroc" in blob or "morocco" in blob:
         return False
     return any(strip_accents(k) in blob for k in GEO_HORS_MAROC_KW)
 
@@ -217,11 +228,15 @@ VILLES_CONNUES = [
 ]
 
 
-def normalize_ville(ville, poste="", texte=""):
+def normalize_ville(ville, poste="", texte="", country=None):
+    """Nom de ville canonique. "Maroc (non précisé)" ne s'applique QUE
+    quand la source a explicitement confirmé le pays MA ; sans ça, on
+    ne peut pas affirmer le pays et on remonte "Lieu non confirmé" pour
+    ne pas mentir à l'utilisateur."""
     if is_online(poste, ville, texte):
         return "En ligne"
     if not ville or not ville.strip():
-        return "Maroc (non précisé)"
+        return "Maroc (non précisé)" if country == "MA" else "Lieu non confirmé"
     v_full = strip_accents(ville).lower()
     premier = ville.split(",")[0].strip()
     premier_l = strip_accents(premier).lower()
@@ -280,6 +295,10 @@ def verdict_of(a):
         return "ÉCARTÉE", "hors Maroc et pas en ligne"
     if a.get("fenetre") == "PASSÉ":
         return "ÉCARTÉE", "événement passé"
+    # Lieu non confirmé + pas en ligne : on ne peut pas garantir le
+    # Maroc -> on écarte plutôt que d'induire l'utilisateur en erreur.
+    if a.get("ville") == "Lieu non confirmé" and not a.get("en_ligne"):
+        return "ÉCARTÉE", "localisation non confirmée"
     return "CONVENABLE", ""
 
 
@@ -293,7 +312,8 @@ def classifier(annonce, today=None):
 
     est, cat, motif = detect_evenement(poste, texte, source)
     online = is_online(poste, ville, texte)
-    hm = hors_maroc(poste, ville, texte)
+    country = annonce.get("country")
+    hm = hors_maroc(poste, ville, texte, country=country)
     fen = fenetre_from_event(annonce.get("date_debut"),
                               annonce.get("date_fin"), today)
 
@@ -304,7 +324,7 @@ def classifier(annonce, today=None):
         "motif_evenement": motif,
         "en_ligne": online, "hors_maroc_flag": hm,
         "fenetre": fen,
-        "ville": normalize_ville(ville, poste, texte),
+        "ville": normalize_ville(ville, poste, texte, country=country),
     })
     verdict, motif_v = verdict_of(out)
     out["verdict"] = verdict
