@@ -88,15 +88,70 @@ NETWORKING_KW = [
 
 # Garde-fous : événements clairement hors scope professionnel.
 HORS_SCOPE_KW = [
+    # Divertissement / vie privée
     "concert", "festival de musique", "music festival",
     "mariage", "wedding", "anniversaire private",
-    "soiree privee", "soirée privée", "prayer", "priere", "prière",
+    "soiree privee", "soirée privée",
+    "concert live", "dj set", "nightclub", "boite de nuit", "boîte de nuit",
+
+    # Religieux
+    "prayer", "priere", "prière",
+
+    # Sport / bien-être (pas du networking pro)
     "yoga", "pilates", "zumba", "fitness",
+
+    # Formations payantes / certifications (pas du networking)
     "bootcamp certifiant", "certifying bootcamp", "formation payante",
     "paid course", "diplome", "diplôme",
-    "concert live", "dj set", "nightclub", "boite de nuit", "boîte de nuit",
+
+    # Gastronomie / loisirs manuels
     "degustation", "dégustation", "wine tasting", "cuisine class",
     "cours de cuisine", "atelier pate", "pâte", "modelage",
+
+    # === Self-help / coaching personnel / developpement personnel ===
+    # Observés en live (meetups Meetup) qui polluaient la base
+    # networking alors qu'ils n'ont rien de professionnel.
+    "attachment theory", "theorie de l'attachement",
+    "attracting love", "attirer l'amour", "attract love",
+    "emotional intelligence", "intelligence emotionnelle",
+    "healing", "guerison", "guérison", "self-healing",
+    "letting go", "lacher prise", "lâcher-prise",
+    "loneliness", "solitude",
+    "control your emotions", "controler vos emotions",
+    "losing yourself", "self-love", "amour de soi",
+    "self-care", "self care", "self-worth", "self worth",
+    "burning method", "heal", "healer", "coach de vie",
+    "life coach", "coaching de vie",
+
+    # Relations amoureuses / dating
+    "relationship", "relationships", "breakup", "rupture amoureuse",
+    "dating", "rencontre amoureuse", "soul mate", "âme sœur",
+    "love coach", "single women", "single men",
+
+    # Sante mentale / bien-etre psycho (hors contexte medical pro)
+    "adhd", "tdah", "anxiety", "anxiete", "anxiété",
+    "depression", "burnout personnel", "mental health support",
+    "therapy group", "groupe de therapie", "therapy session",
+    "vagus nerve", "nerf vague", "gut feelings", "gut issues",
+    "spiritual", "spirituel", "meditation", "méditation",
+    "chakra", "reiki", "mindfulness retreat",
+
+    # Language exchange (pas du networking pro)
+    "language cafe", "language café", "cafe langue",
+    "english practice", "english speaking practice",
+    "practice your english", "practice english", "language exchange",
+    "speak english", "arabic session", "arabic cafe", "arabic café",
+
+    # Vie sociale generaliste (pas pro)
+    "making friends", "chronically chill", "weekly social",
+    "monthly reset", "knit/crochet", "crochet", "craft meetup",
+    "chill", "hangout",
+
+    # Immigration / expatriation personnelle (pas pro)
+    "moving to", "migrant", "visa seeker",
+
+    # Photographie loisir (ce n'est pas du networking pro)
+    "fotoworkshop", "foto workshop", "photo workshop touristique",
 ]
 
 

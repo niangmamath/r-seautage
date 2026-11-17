@@ -74,6 +74,41 @@ class TestDetection(unittest.TestCase):
             "Session yoga matinale Rabat", "")
         self.assertFalse(ok)
 
+    def test_rejet_self_help_psychology(self):
+        # Observé en live : meetups self-help/psycho qui polluaient la base
+        ok, _, motif = detect_evenement(
+            "The Psychology of Losing Yourself in Relationships", "",
+            source="Meetup")
+        self.assertFalse(ok)
+        self.assertIn("hors scope", motif)
+
+    def test_rejet_attachment_theory(self):
+        ok, _, _ = detect_evenement(
+            "Webinar attachment theory healing after a breakup", "",
+            source="Meetup")
+        self.assertFalse(ok)
+
+    def test_rejet_language_exchange(self):
+        ok, _, _ = detect_evenement(
+            "Arabic Language Cafe", "", source="Meetup")
+        self.assertFalse(ok)
+
+    def test_rejet_english_practice(self):
+        ok, _, _ = detect_evenement(
+            "English Speaking Practice - Professional Host", "",
+            source="Meetup")
+        self.assertFalse(ok)
+
+    def test_rejet_adhd_wellness(self):
+        ok, _, _ = detect_evenement(
+            "ADHD and Emotional Intelligence", "", source="Meetup")
+        self.assertFalse(ok)
+
+    def test_rejet_making_friends(self):
+        ok, _, _ = detect_evenement(
+            "Making Friends and Being Happier", "", source="Meetup")
+        self.assertFalse(ok)
+
     def test_meetup_fallback_source(self):
         # Sans mot-clé ciblé, un événement source=Meetup est accepté
         # comme Networking par construction.
