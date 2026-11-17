@@ -52,10 +52,24 @@ export default async function HomePage() {
       {items.length > 0 ? <ItemListJsonLd items={items} /> : null}
       <EvenementsExplorer items={items} derniereMaj={maj} />
       <footer className="mt-auto border-t border-gray-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-gray-400 sm:px-6">
-          Événements collectés automatiquement (Eventbrite, Meetup) —
-          vérifiez toujours les conditions d&apos;inscription auprès de
-          l&apos;organisateur.
+        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-gray-400 sm:px-6 space-y-2">
+          <p>
+            Événements collectés automatiquement (Eventbrite, Meetup) —
+            vérifiez toujours les conditions d&apos;inscription auprès de
+            l&apos;organisateur.
+          </p>
+          <p>
+            <a href="/mentions-legales" className="hover:text-gray-600">
+              Mentions légales
+            </a>
+            {" · "}
+            <a
+              href="/politique-confidentialite"
+              className="hover:text-gray-600"
+            >
+              Politique de confidentialité
+            </a>
+          </p>
         </div>
       </footer>
     </div>

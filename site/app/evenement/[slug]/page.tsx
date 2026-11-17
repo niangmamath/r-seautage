@@ -229,9 +229,23 @@ export default async function EvenementPage({ params }: { params: Params }) {
       </main>
 
       <footer className="mt-auto border-t border-gray-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-gray-400 sm:px-6">
-          Événement collecté automatiquement — vérifiez toujours les
-          conditions auprès de l&apos;organisateur.
+        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-gray-400 sm:px-6 space-y-2">
+          <p>
+            Événement collecté automatiquement — vérifiez toujours les
+            conditions auprès de l&apos;organisateur.
+          </p>
+          <p>
+            <a href="/mentions-legales" className="hover:text-gray-600">
+              Mentions légales
+            </a>
+            {" · "}
+            <a
+              href="/politique-confidentialite"
+              className="hover:text-gray-600"
+            >
+              Politique de confidentialité
+            </a>
+          </p>
         </div>
       </footer>
     </div>
