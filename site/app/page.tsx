@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { getEvenements, getDerniereMaj, type Evenement } from "@/lib/db";
 import EvenementsExplorer from "@/components/EvenementsExplorer";
+import MaillageInterne from "@/components/MaillageInterne";
+import CategorieFAQ from "@/components/CategorieFAQ";
 import { HandshakeIcon } from "@/components/icons";
 import { siteUrl } from "@/lib/site-url";
 
@@ -51,6 +54,45 @@ export default async function HomePage() {
     <div className="flex min-h-full flex-col">
       {items.length > 0 ? <ItemListJsonLd items={items} /> : null}
       <EvenementsExplorer items={items} derniereMaj={maj} />
+
+      <section className="bg-white px-4 py-10 sm:px-6">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
+            Le réseautage professionnel au Maroc
+          </h2>
+          <div className="mt-4 space-y-3 text-sm leading-relaxed text-gray-700">
+            <p>
+              Le Maroc voit émerger chaque mois de nouveaux{" "}
+              <strong>meetups tech</strong>, <strong>conférences business</strong>,{" "}
+              <strong>forums professionnels</strong> et{" "}
+              <strong>salons sectoriels</strong> à Casablanca, Rabat, Marrakech,
+              Tanger, Agadir et Fès. Ce catalogue les regroupe en un endroit, à
+              jour tous les 2 jours.
+            </p>
+            <p>
+              Toutes les fiches renvoient vers la page officielle de
+              l&apos;organisateur (Eventbrite, Meetup, site propre) — vous vous
+              inscrivez directement là-bas. Filtrez par{" "}
+              <Link href="/en-ligne" className="font-medium text-rose-600 hover:underline">
+                événements en ligne
+              </Link>{" "}
+              accessibles depuis le Maroc, ou consultez les{" "}
+              <Link href="/nouveautes" className="font-medium text-rose-600 hover:underline">
+                dernières nouveautés
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <CategorieFAQ
+        contexte={{ type: "en-ligne" }}
+        evenements={items}
+      />
+
+      <MaillageInterne />
+
       <footer className="mt-auto border-t border-gray-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-gray-400 sm:px-6 space-y-2">
           <p>
