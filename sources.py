@@ -171,6 +171,16 @@ EVENTBRITE_PATHS = [
 
 
 def collect_eventbrite():
+    # NOTE 2026-11-18 : Eventbrite renvoie HTTP 405 (Method Not Allowed) sur
+    # les IP de GitHub Actions / cloud providers. Les memes URLs repondent
+    # 200 depuis une IP residentielle. Blocage anti-bot cote CDN. Tant qu'on
+    # n'a pas de proxy residentiel ni de rendu JS headless, on evite d'appeler
+    # Eventbrite : 6 requetes qui echouent systematiquement polluent les logs
+    # sans aucun gain. Si tu veux retester, mets EVENTBRITE_ENABLED=1 en env.
+    import os
+    if os.environ.get("EVENTBRITE_ENABLED", "0") != "1":
+        print("  → Eventbrite (desactive : 405 sur IP cloud)")
+        return []
     print("  → Eventbrite")
     seen_urls = set()
     out = []
