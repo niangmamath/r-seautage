@@ -11,7 +11,7 @@ export const revalidate = 1800;
 export const metadata: Metadata = {
   title: "Nouveautés — derniers événements networking au Maroc",
   description:
-    "Les événements networking détectés ces 7 derniers jours au Maroc : meetups, conférences, forums, workshops. Nouveaux ajouts tous les 2 jours.",
+    "Les événements networking détectés ces 7 derniers jours au Maroc : meetups, conférences, forums, workshops. Nouveaux ajouts chaque jour.",
   alternates: { canonical: "/nouveautes" },
   openGraph: {
     title: "Nouveaux événements networking au Maroc",

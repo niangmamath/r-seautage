@@ -2,16 +2,17 @@ name: Scraping networking Maroc
 
 # Depot dedie : a pousser sur le remote GitHub choisi (voir README).
 #
-# Declencheur : tous les 2 jours a 06:00 UTC (meme cadence que les autres
-# veilles). Cron GitHub Actions est "best-effort" cote horaire -- un
-# retard de quelques minutes/heures ne pose pas de probleme ici : les
-# evenements ont des fenetres de plusieurs jours.
+# Declencheur : tous les jours a 05:37 UTC (~06h40 heure Maroc), comme le
+# site de stages. Minute volontairement decalee du debut d'heure (et des
+# hackathons, 05:23) : le cron GitHub Actions est "best-effort" et les
+# crons a HH:00 sont les plus retardes (constate en 11/2026 : runs prevus
+# a 06:00 lances 7 a 12 h plus tard).
 #
 # Prerequis Settings -> Secrets and variables -> Actions sur ce depot :
 #   - DATABASE_URL  (chaine Neon Postgres directe, port 5432, sslmode=require)
 on:
   schedule:
-    - cron: "0 6 */2 * *"
+    - cron: "37 5 * * *"
   workflow_dispatch: {}
 
 jobs:

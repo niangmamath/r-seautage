@@ -67,7 +67,7 @@ export default async function HomePage() {
               <strong>forums professionnels</strong> et{" "}
               <strong>salons sectoriels</strong> à Casablanca, Rabat, Marrakech,
               Tanger, Agadir et Fès. Ce catalogue les regroupe en un endroit, à
-              jour tous les 2 jours.
+              jour chaque jour.
             </p>
             <p>
               Toutes les fiches renvoient vers la page officielle de

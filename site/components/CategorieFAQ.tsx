@@ -30,7 +30,7 @@ function faqsPourContexte(
     return [
       {
         q: `Combien d'événements ${ctx.nom} recensés au Maroc ?`,
-        r: `Nous recensons actuellement ${n} événement${n > 1 ? "s" : ""} de type ${ctx.nom} au Maroc, dont ${nEnLigne} accessible${nEnLigne > 1 ? "s" : ""} en ligne. Le catalogue est mis à jour tous les 2 jours à partir de sources ouvertes (Eventbrite, Meetup).`,
+        r: `Nous recensons actuellement ${n} événement${n > 1 ? "s" : ""} de type ${ctx.nom} au Maroc, dont ${nEnLigne} accessible${nEnLigne > 1 ? "s" : ""} en ligne. Le catalogue est mis à jour chaque jour à partir de sources ouvertes (Eventbrite, Meetup).`,
       },
       {
         q: `Qui organise ces événements ${ctx.nom} ?`,

@@ -6,7 +6,7 @@ import { siteUrl } from "@/lib/site-url";
 
 const title = "Networking au Maroc — meetups, conférences, forums";
 const description =
-  "Catalogue à jour des événements networking au Maroc : meetups tech, conférences, forums professionnels, salons, soirées réseautage. Collecte automatique sur Eventbrite et Meetup, mise à jour tous les 2 jours.";
+  "Catalogue à jour des événements networking au Maroc : meetups tech, conférences, forums professionnels, salons, soirées réseautage. Collecte automatique sur Eventbrite et Meetup, mise à jour chaque jour.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

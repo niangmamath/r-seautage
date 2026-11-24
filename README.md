@@ -87,7 +87,7 @@ sont plus convenables sont supprimés, sauf `manuel = TRUE`.
 ## Automatisation cloud (GitHub Actions)
 
 [`.github/workflows/scrape_networking.yml`](.github/workflows/scrape_networking.yml)
-— cron tous les 2 jours à 06:00 UTC + déclenchement manuel. Secret
+— cron tous les jours à 05:37 UTC + déclenchement manuel. Secret
 requis : `DATABASE_URL`.
 
 ## Tests

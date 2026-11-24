@@ -29,7 +29,7 @@ export async function generateMetadata({
   const path = `/categorie/${slug}`;
   return {
     title: `${nom} au Maroc — événements à venir`,
-    description: `${trouve.n} événement${trouve.n > 1 ? "s" : ""} de type ${nom} au Maroc : dates, organisateurs, inscription. Mis à jour tous les 2 jours.`,
+    description: `${trouve.n} événement${trouve.n > 1 ? "s" : ""} de type ${nom} au Maroc : dates, organisateurs, inscription. Mis à jour chaque jour.`,
     keywords: [
       `${nom} Maroc`,
       `${nom} Casablanca`,
@@ -68,7 +68,7 @@ export default async function CategoriePage({ params }: { params: Params }) {
         <p>
           Tous les événements <strong>{trouve.categorie}</strong> au Maroc :
           meetups, conférences, forums professionnels. Nouveaux événements
-          détectés automatiquement tous les 2 jours.
+          détectés automatiquement chaque jour.
         </p>
       }
       evenements={evenements}

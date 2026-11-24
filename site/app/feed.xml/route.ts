@@ -50,7 +50,7 @@ export async function GET() {
     <title>Networking au Maroc — nouveaux événements</title>
     <link>${siteUrl}/</link>
     <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Meetups, conférences, forums professionnels au Maroc. Mis à jour tous les 2 jours.</description>
+    <description>Meetups, conférences, forums professionnels au Maroc. Mis à jour chaque jour.</description>
     <language>fr-MA</language>
     <lastBuildDate>${now}</lastBuildDate>${entries}
   </channel>
