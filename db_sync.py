@@ -153,7 +153,9 @@ def sync(items, database_url=None):
             conn.close()
     except Exception as e:
         print(f"  [db] ERREUR synchro : {e}")
-        return
+        # Code de sortie non nul : le workflow passe en échec (et GitHub
+        # envoie une alerte) au lieu d'afficher un succès trompeur.
+        raise SystemExit(1) from e
 
     print(f"  [db] {len(convenables)} événement(s) synchronisé(s) "
           f"({supprimes} retiré(s)).")
