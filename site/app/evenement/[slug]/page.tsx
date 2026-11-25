@@ -60,6 +60,13 @@ export async function generateMetadata({
   };
 }
 
+/** Page du groupe organisateur, déduite d'une URL d'événement Meetup
+ * (https://www.meetup.com/<groupe>/events/<id>/ -> .../<groupe>/), null sinon. */
+function urlGroupeMeetup(url: string): string | null {
+  const m = url.match(/^(https:\/\/(?:www\.)?meetup\.com\/[^/]+\/)events\//);
+  return m ? m[1] : null;
+}
+
 function formatDate(iso: string | null): string {
   if (!iso) return "date non précisée";
   const [y, m, d] = iso.split("-");
@@ -73,21 +80,33 @@ export default async function EvenementPage({ params }: { params: Params }) {
   if (!e) notFound();
 
   const pageUrl = `${siteUrl}/evenement/${slug}`;
+  const organisateurUrl = urlGroupeMeetup(e.url);
 
+  // Search Console 11/2026 : image / endDate / organizer.url manquants.
+  // offers (prix) et performer (intervenants) restent absents : les sources
+  // ne les donnent pas, et Google sanctionne les valeurs inventées.
   const eventLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Event",
     name: e.titre,
     description: e.description || undefined,
     url: pageUrl,
+    // Image Open Graph générée pour chaque événement (opengraph-image.tsx).
+    image: [`${pageUrl}/opengraph-image`],
     startDate: e.date_debut || undefined,
-    endDate: e.date_fin || undefined,
+    // Les sources (Meetup) ne donnent pas de date de fin : ce sont des
+    // événements d'une journée, la fin est donc le jour du début.
+    endDate: e.date_fin || e.date_debut || undefined,
     eventAttendanceMode: e.en_ligne
       ? "https://schema.org/OnlineEventAttendanceMode"
       : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     organizer: e.organisateur
-      ? { "@type": "Organization", name: e.organisateur }
+      ? {
+          "@type": "Organization",
+          name: e.organisateur,
+          ...(organisateurUrl ? { url: organisateurUrl } : {}),
+        }
       : undefined,
     location: e.en_ligne
       ? { "@type": "VirtualLocation", url: e.url || pageUrl }
